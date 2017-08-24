@@ -1,0 +1,749 @@
+<!-- Layout for the editor -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Layout for the editor -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".EditorActivity">
+
+        <!-- Overview category -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="16dp"
+                android:text="@string/category_overview"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <!-- Input fields -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:paddingLeft="4dp">
+
+
+                <!-- Name field -->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayoutClientName"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/edit_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_name"
+                        android:inputType="textCapWords" />
+                </android.support.design.widget.TextInputLayout>
+
+                <!-- Address field -->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayoutDeliveryAddress"
+                    android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Delivery address"
+                    android:inputType="textImeMultiLine" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <!-- Dress style field -->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/inputLayoutClothSytle"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/edit_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_style"
+                        android:inputType="textCapWords" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- Gender category -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="16dp"
+                android:text="@string/category_gender"
+                android:textColor="@color/colorAccent" />
+
+
+
+                <!-- Gender drop-down spinner -->
+                <Spinner
+                    android:id="@+id/spinner_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingRight="16dp"
+                    android:spinnerMode="dropdown" />
+
+                <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:id="@+id/message"
+                    android:layout_weight="1"
+                android:text="@string/send_sms"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:layout_weight="1"
+                    android:id="@+id/msg"
+                    android:text="SMS 2"/>
+
+
+        </LinearLayout>
+
+
+        <!-- Measurement category -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="16dp"
+                android:text="line 1"
+                android:textColor="#cc652bec" />
+
+            <!-- Input fields -->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingLeft="8dp">
+
+                <!--Dialer -->
+                <ImageButton
+                    android:id="@+id/dial1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/call"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:padding="21dp" />
+
+
+                <!-- Phone number field -->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/number1"
+                        android:layout_width="match_parent"
+                        android:inputType="phone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36dp"
+                        android:digits="01234567890*+-.#"
+                        android:hint="Phone" />
+                </android.support.design.widget.TextInputLayout>
+
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <!-- Measurement category -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="16dp"
+                android:text="line 2"
+                android:textColor="#cc3f8012" />
+
+
+            <!-- Input fields -->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingLeft="4dp">
+
+
+                <!--Dialer -->
+                <ImageButton
+                    android:id="@+id/dial2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:padding="21dp"
+                    android:backgroundTint="@color/editorColorPrimaryDark"
+                    android:background="@drawable/call" />
+
+                <!-- Phone number field -->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/number2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36dp"
+                        android:inputType="phone"
+                        android:digits="01234567890*+-.#"
+                        android:hint="Phone" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/containst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="16dp"
+                android:text="Mailing address"
+                android:textColor="#ccec652b" />
+
+
+            <!-- Input fields -->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingLeft="4dp">
+
+                <!-- Email address field -->
+                <ImageButton
+                    android:id="@+id/mail1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:padding="21dp"
+                    android:background="@drawable/email"
+                    android:backgroundTint="@color/colorAccent2" />
+
+                <!-- Email address field -->
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:hint="email"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    <!-- Overview category -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:text="@string/category_measurement"
+            android:textColor="@color/colorPrimaryDark" />
+
+
+        <!-- Input fields -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="4dp">
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- Boss field -->
+                <EditText
+                    android:id="@+id/edit_boss"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Boss"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Waist field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_waist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Waist"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Hip field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_hip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Hip"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Shoulder field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_shoulder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Shoulder"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Short Sleeve length field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_shortsleevelength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Short Sleeve Length"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Short Sleeve length field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_longleevelength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Long Sleeve Length"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Short Sleeve length field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_roundtop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Top"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Short Sleeve length field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_skirtlength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Skirt Length"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Short Sleeve length field -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_blouselength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:hint="Blouse Length"
+                    android:inputType="phone"
+                    android:digits="01234567890*+-.#"
+                    android:textColor="@color/colorAccent2" />
+            </android.support.design.widget.TextInputLayout>
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Overview category -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+    <!-- Label -->
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="16dp"
+        android:text="Male measurement"
+        android:textColor="@color/colorPrimaryDark" />
+
+
+    <!-- Input fields -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:paddingLeft="4dp">
+
+        <!-- Kaftan field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_kaftanlength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Kaftan Length"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#"
+            android:paddingTop="60dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Top length -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_maleTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Top length"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Neck field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_neck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Neck"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Shoulder field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_maleshoulder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Shoulder"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Short Sleeve length field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_maleshortsleevelength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Short sleeve length"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Long Sleeve length field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_malelongleevelength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Long sleeve length"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Chest length field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_chest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Chest"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Belly length field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_belly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Belly"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Trouser length field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_trouserlength"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Trouser Length"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Thigh field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_thigh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Thigh"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#"
+            android:textColor="@color/colorAccent2" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Waist field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_malewaist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Waist"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#"
+            android:textColor="@color/colorAccent2" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <!-- Calf field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_calf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Calf"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#"
+            android:textColor="@color/colorAccent2" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Ankle field -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_ankle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:hint="Ankle"
+            android:inputType="phone"
+            android:digits="01234567890*+-.#" />
+        </android.support.design.widget.TextInputLayout>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--payment terms-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="16dp"
+                android:text="Payment terms"/>
+
+            <!-- Input fields -->
+            <LinearLayout
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingLeft="4dp">
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <!-- Amount field -->
+                    <EditText
+                        android:id="@+id/amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:hint="Amount"
+                        android:inputType="phone"
+                        android:digits="01234567890."/>
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <!-- Advance payment field -->
+                    <EditText
+                        android:id="@+id/advance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:hint="advance payment"
+                        android:inputType="phone"
+                        android:digits="01234567890." />
+                </android.support.design.widget.TextInputLayout>
+
+                <!--balance payment-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:id="@+id/balance"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    tools:text="@string/balance_payment"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/edit_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:hint="date"
+                        android:digits="0123456789./-"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</ScrollView>

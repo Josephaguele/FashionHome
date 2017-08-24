@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Ajoke Ade Couture</string>
+
+    <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
+    <string name="action_save">Save</string>
+
+    <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
+
+
+    <string name="mailto">mailto:</string>
+    <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
+    <string name="category_overview">Overview</string>
+
+    <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
+    <string name="category_gender">Gender</string>
+
+    <!-- Label for measurement information in the editor [CHAR LIMIT=30] -->
+    <string name="category_measurement">Female Measurement</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_name">Client Name</string>
+
+    <!-- Text hint for style field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_style">Cloth Style</string>
+
+    <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_length">Length</string>
+
+    <!-- Units for length of the customer (inches) [CHAR LIMIT=5] -->
+    <string name="unit_length">inches</string>
+
+    <!-- Label for dropdown menu option if the pet's gender is unknown [CHAR LIMIT=20] -->
+    <string name="gender_unknown">Unknown</string>
+
+    <!-- Label for dropdown menu option if the pet is male [CHAR LIMIT=20] -->
+    <string name="gender_male">Male</string>
+
+    <!-- Label for dropdown menu option if the pet is female [CHAR LIMIT=20] -->
+    <string name="gender_female">Female</string>
+    <string name="your_cloth">"YOUR CLOTH: "</string>
+    <string name="share_client_details">Share client details</string>
+    <string name="insert_dummy_client_data">Insert dummy client data</string>
+    <string name="search_client">Search client</string>
+    <string name="about">About</string>
+    <string name="delete_all">Delete all</string>
+    <string name="client_name">"Client Name: "</string>
+    <string name="style">"Cloth style: "</string>
+    <string name="female_shoulder">"Shoulder: "</string>
+    <string name="female_short_sleevelength">"Short Sleeve length: "</string>
+    <string name="blouse_length">"Blouse Length: "</string>
+    <string name="skirt_length">"Skirt length: "</string>
+    <string name="long_sleeve_length">"Long Sleeve Length: "</string>
+    <string name="hip">Hip:</string>
+    <string name="waist">"Waist: "</string>
+    <string name="boss">"Boss: "</string>
+    <string name="measurement">Measurement details are:\n</string>
+    <string name="ajoke_ade_couture">AJOKE ADE COUTURE\n</string>
+    <string name="balance_payment">balance</string>
+    <string name="amount">Amount</string>
+    <string name="send_sms">SMS 1</string>
+
+
+</resources>
