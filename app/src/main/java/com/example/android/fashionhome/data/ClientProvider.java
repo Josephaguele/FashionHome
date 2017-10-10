@@ -1,16 +1,25 @@
 package com.example.android.fashionhome.data;
 
+import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import com.example.android.fashionhome.data.ClientContract.ClientEntry;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.android.fashionhome.data.ClientContract.ClientEntry;
+
+import java.util.HashMap;
+
+import static android.app.SearchManager.SUGGEST_MIME_TYPE;
+import static android.app.SearchManager.SUGGEST_URI_PATH_QUERY;
+import static android.app.SearchManager.SUGGEST_URI_PATH_SHORTCUT;
+import static com.example.android.fashionhome.data.ClientContract.CONTENT_AUTHORITY;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.ADVANCE;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.AMOUNT;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_ANKLE;
@@ -20,6 +29,7 @@ import static com.example.android.fashionhome.data.ClientContract.ClientEntry.CO
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_CALF;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_CHEST;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_CLIENT_BOSS;
+import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_CLIENT_NAME;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_CLIENT_WAIST;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_DATE;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.COLUMN_FEMALELONGSLEEVE;
@@ -47,11 +57,27 @@ public class ClientProvider extends ContentProvider {
     //Tag for the log messages
     public static final String LOG_TAG = ClientProvider.class.getSimpleName();
 
-    /** URI matcher code for the content URI for the clients table */
+    /**
+     * URI matcher code for the content URI for the clients table
+     */
     private static final int CLIENTS = 100;
 
-    /** URI matcher code for the content URI for a single client in the clients table */
+    /**
+     * URI matcher code for the content URI for a single client in the clients table
+     */
     private static final int CLIENT_ID = 101;
+
+    private static final int SEARCH = 3;
+
+    public static final String KEY_SEARCH_COLUMN =COLUMN_CLIENT_NAME;
+    private static final HashMap<String, String> SEARCH_SUGGEST_PROJECTION_MAP;
+    static {
+        SEARCH_SUGGEST_PROJECTION_MAP = new HashMap<String, String>();
+        SEARCH_SUGGEST_PROJECTION_MAP.put(ClientEntry._ID, ClientEntry._ID);
+        SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_TEXT_1, KEY_SEARCH_COLUMN + " AS " + SearchManager.SUGGEST_COLUMN_TEXT_1);
+        SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_TEXT_2, ClientEntry.COLUMN_CLIENT_STYLE + " AS " + SearchManager.SUGGEST_COLUMN_TEXT_2);
+        SEARCH_SUGGEST_PROJECTION_MAP.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, ClientEntry._ID + " AS " + SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
+    }
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -69,7 +95,7 @@ public class ClientProvider extends ContentProvider {
         // The content URI of the form "content://com.example.android.fashionhome/clients" will map to the
         // integer code {@link #CLIENTS}. This URI is used to provide access to MULTIPLE rows
         // of the clients table.
-        sUriMatcher.addURI(ClientContract.CONTENT_AUTHORITY, ClientContract.PATH_CLIENTS, CLIENTS);
+        sUriMatcher.addURI(CONTENT_AUTHORITY, ClientContract.PATH_CLIENTS, CLIENTS);
 
         // The content URI of the form "content://com.example.android.fashionhome/clients/#" will map to the
         // integer code {@link #CLIENT_ID}. This URI is used to provide access to ONE single row
@@ -78,7 +104,17 @@ public class ClientProvider extends ContentProvider {
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.example.android.fashionhome/clients/3" matches, but
         // "content://com.example.android.fashionhome/clients" (without a number at the end) doesn't match.
-        sUriMatcher.addURI(ClientContract.CONTENT_AUTHORITY, ClientContract.PATH_CLIENTS + "/#", CLIENT_ID);
+        sUriMatcher.addURI(CONTENT_AUTHORITY, ClientContract.PATH_CLIENTS + "/#", CLIENT_ID);
+    }
+
+
+    public static final Uri SEARCH_SUGGEST_URI = Uri.parse("content://" + ClientContract.CONTENT_AUTHORITY + "/" + CLIENT_ID);
+    public ClientProvider(){
+        // For searching
+        sUriMatcher.addURI(CONTENT_AUTHORITY,SUGGEST_URI_PATH_QUERY,SEARCH);
+        sUriMatcher.addURI(CONTENT_AUTHORITY,SUGGEST_URI_PATH_QUERY +"/*", SEARCH);
+       // sUriMatcher.addURI(CONTENT_AUTHORITY,SUGGEST_URI_PATH_SHORTCUT,SEARCH);
+       // sUriMatcher.addURI(CONTENT_AUTHORITY,SUGGEST_URI_PATH_SHORTCUT+"/*", SEARCH);
     }
 
     //Database helper object
@@ -99,11 +135,20 @@ public class ClientProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
         // This cursor will hold the result of the query
-        Cursor cursor;
+        Cursor cursor =null;
+
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(ClientEntry.TABLE_NAME);
 
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
+            case SEARCH:
+                selectionArgs = new String[]{ "%" + selectionArgs[0] + "%", "%" + selectionArgs[0] +"%"};
+                queryBuilder.setProjectionMap(SEARCH_SUGGEST_PROJECTION_MAP);
+                cursor = queryBuilder.query(database,projection,selection,selectionArgs,null,null,sortOrder);
+                break;
+
             case CLIENTS:
                 // For the CLIENTS code, query the clients table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
@@ -124,7 +169,7 @@ public class ClientProvider extends ContentProvider {
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
                 selection = ClientEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the clients table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
@@ -161,14 +206,14 @@ public class ClientProvider extends ContentProvider {
      */
     private Uri insertClient(Uri uri, ContentValues values) {
         // Check that the name is not null
-        String name = values.getAsString(ClientEntry.COLUMN_CLIENT_NAME);
+        String name = values.getAsString(COLUMN_CLIENT_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Client requires a name");
         }
 
         // Check that the address is not null
         String address = values.getAsString(ClientEntry.COLUMN_CLIENT_ADDRESS);
-        if(address == null){
+        if (address == null) {
             throw new IllegalArgumentException("Client requires an address");
         }
         // Check that the gender is valid
@@ -248,13 +293,12 @@ public class ClientProvider extends ContentProvider {
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = ClientEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateClient(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
-
 
 
     /**
@@ -265,23 +309,23 @@ public class ClientProvider extends ContentProvider {
     private int updateClient(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // If the {@link ClientEntry#COLUMN_CLIENT_NAME} key is present,
         // check that the name value is not null.
-        if (values.containsKey(ClientEntry.COLUMN_CLIENT_NAME)) {
-            String name = values.getAsString(ClientEntry.COLUMN_CLIENT_NAME);
+        if (values.containsKey(COLUMN_CLIENT_NAME)) {
+            String name = values.getAsString(COLUMN_CLIENT_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Client requires a name");
             }
         }
 
         // check that the address is not  null
-        if (values.containsKey(ClientEntry.COLUMN_CLIENT_ADDRESS)){
+        if (values.containsKey(ClientEntry.COLUMN_CLIENT_ADDRESS)) {
             String address = values.getAsString(ClientEntry.COLUMN_CLIENT_ADDRESS);
-            if (address == null){
+            if (address == null) {
                 throw new IllegalArgumentException("Address is important");
             }
         }
 
 
-            // If the {@link ClientEntry#COLUMN_CLIENT_GENDER} key is present,
+        // If the {@link ClientEntry#COLUMN_CLIENT_GENDER} key is present,
         // check that the gender value is valid.
         if (values.containsKey(ClientEntry.COLUMN_CLIENT_GENDER)) {
             Integer gender = values.getAsInteger(ClientEntry.COLUMN_CLIENT_GENDER);
@@ -290,9 +334,9 @@ public class ClientProvider extends ContentProvider {
             }
         }
 
-        if(values.containsKey(ClientEntry.COLUMN_CLIENT_STYLE)){
+        if (values.containsKey(ClientEntry.COLUMN_CLIENT_STYLE)) {
             String name = values.getAsString(ClientEntry.COLUMN_CLIENT_STYLE);
-            if(name == null){
+            if (name == null) {
                 throw new IllegalArgumentException("Client requires a style");
             }
         }
@@ -306,119 +350,118 @@ public class ClientProvider extends ContentProvider {
             }
         }
 
-        if(values.containsKey(ClientEntry.COLUMN_CLIENT_NUMBER2)){
+        if (values.containsKey(ClientEntry.COLUMN_CLIENT_NUMBER2)) {
             String number2 = values.getAsString(ClientEntry.COLUMN_CLIENT_NUMBER2);
         }
 
-        if(values.containsKey(ClientEntry.COLUMN_EMAIL)){
+        if (values.containsKey(ClientEntry.COLUMN_EMAIL)) {
             String email = values.getAsString(ClientEntry.COLUMN_EMAIL);
         }
 
-        if(values.containsKey(COLUMN_CLIENT_BOSS)){
+        if (values.containsKey(COLUMN_CLIENT_BOSS)) {
             String boss = values.getAsString(COLUMN_CLIENT_BOSS);
         }
 
-        if(values.containsKey(COLUMN_CLIENT_WAIST)){
-            String waist  = values.getAsString(COLUMN_CLIENT_WAIST);
+        if (values.containsKey(COLUMN_CLIENT_WAIST)) {
+            String waist = values.getAsString(COLUMN_CLIENT_WAIST);
         }
 
-        if(values.containsKey(COLUMN_HIP)){
+        if (values.containsKey(COLUMN_HIP)) {
             String hip = values.getAsString(COLUMN_HIP);
         }
 
-        if (values.containsKey(COLUMN_FEMALE_SHOULDER)){
+        if (values.containsKey(COLUMN_FEMALE_SHOULDER)) {
             String shoulder = values.getAsString(COLUMN_FEMALE_SHOULDER);
         }
 
-        if (values.containsKey(COLUMN_FEMALESHORTSLEEVE)){
+        if (values.containsKey(COLUMN_FEMALESHORTSLEEVE)) {
             String fShortSleeve = values.getAsString(COLUMN_FEMALESHORTSLEEVE);
         }
 
-        if(values.containsKey(COLUMN_FEMALELONGSLEEVE)){
+        if (values.containsKey(COLUMN_FEMALELONGSLEEVE)) {
             String fLongSleeve = values.getAsString(COLUMN_FEMALELONGSLEEVE);
         }
 
-        if(values.containsKey(COLUMN_TOP)){
+        if (values.containsKey(COLUMN_TOP)) {
             String top = values.getAsString(COLUMN_TOP);
         }
 
-        if(values.containsKey(COLUMN_SKIRT_LENGTH)){
+        if (values.containsKey(COLUMN_SKIRT_LENGTH)) {
             String skirtLength = values.getAsString(COLUMN_SKIRT_LENGTH);
         }
 
-        if(values.containsKey(COLUMN_BLOUSE_LENGTH)){
+        if (values.containsKey(COLUMN_BLOUSE_LENGTH)) {
             String blouseLength = values.getAsString(COLUMN_BLOUSE_LENGTH);
         }
 
-        if(values.containsKey(COLUMN_CAFTAN_LENGTH)){
+        if (values.containsKey(COLUMN_CAFTAN_LENGTH)) {
             String kaftanLength = values.getAsString(COLUMN_CAFTAN_LENGTH);
         }
 
-        if (values.containsKey(COLUMN_TOP_LENGTH)){
+        if (values.containsKey(COLUMN_TOP_LENGTH)) {
             String top_length = values.getAsString(COLUMN_TOP_LENGTH);
         }
 
-        if (values.containsKey(COLUMN_NECK)){
+        if (values.containsKey(COLUMN_NECK)) {
             String neck = values.getAsString(COLUMN_NECK);
         }
 
-        if(values.containsKey(COLUMN_MALE_SHOULDER)){
+        if (values.containsKey(COLUMN_MALE_SHOULDER)) {
             String shoulder = values.getAsString(COLUMN_MALE_SHOULDER);
         }
 
-        if(values.containsKey(COLUMN_MALE_SS)){
+        if (values.containsKey(COLUMN_MALE_SS)) {
             String maleShortSleeve = values.getAsString(COLUMN_MALE_SS);
         }
 
-        if(values.containsKey(COLUMN_MALE_LS)){
+        if (values.containsKey(COLUMN_MALE_LS)) {
             String maleLongSleeve = values.getAsString(COLUMN_MALE_LS);
         }
 
-        if (values.containsKey(COLUMN_CHEST)){
+        if (values.containsKey(COLUMN_CHEST)) {
             String chest = values.getAsString(COLUMN_CHEST);
         }
 
-        if (values.containsKey(COLUMN_BELLY)){
+        if (values.containsKey(COLUMN_BELLY)) {
             String belly = values.getAsString(COLUMN_BELLY);
         }
 
-        if(values.containsKey(COLUMN_TROUSER_LENGTH)){
+        if (values.containsKey(COLUMN_TROUSER_LENGTH)) {
             String trouserLength = values.getAsString(COLUMN_TROUSER_LENGTH);
         }
 
-        if(values.containsKey(COLUMN_THIGH)){
+        if (values.containsKey(COLUMN_THIGH)) {
             String thigh = values.getAsString(COLUMN_THIGH);
         }
 
-        if(values.containsKey(COLUMN_WAIST)){
+        if (values.containsKey(COLUMN_WAIST)) {
             String waist = values.getAsString(COLUMN_WAIST);
         }
 
-        if (values.containsKey(COLUMN_CALF)){
-            String calf  = values.getAsString(COLUMN_CALF);
+        if (values.containsKey(COLUMN_CALF)) {
+            String calf = values.getAsString(COLUMN_CALF);
         }
 
-        if(values.containsKey(COLUMN_ANKLE)){
+        if (values.containsKey(COLUMN_ANKLE)) {
             String ankle = values.getAsString(COLUMN_ANKLE);
         }
 
-        if(values.containsKey(COLUMN_THIGH)){
+        if (values.containsKey(COLUMN_THIGH)) {
             String thigh = values.getAsString(COLUMN_THIGH);
         }
 
-        if(values.containsKey(COLUMN_DATE)){
+        if (values.containsKey(COLUMN_DATE)) {
             String date = values.getAsString(COLUMN_DATE);
         }
 
-        if(values.containsKey(AMOUNT)){
+        if (values.containsKey(AMOUNT)) {
             String amount = values.getAsString(AMOUNT);
         }
 
-        if(values.containsKey(ADVANCE)){
+        if (values.containsKey(ADVANCE)) {
             String advance = values.getAsString(ADVANCE);
 
         }
-
 
 
         // No need to check the style, any value is valid (including null).
@@ -461,8 +504,8 @@ public class ClientProvider extends ContentProvider {
             case CLIENT_ID:
                 // Delete a single row given by the ID in the URI
                 selection = ClientEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                    rowsDeleted = database.delete(ClientEntry.TABLE_NAME, selection, selectionArgs);
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(ClientEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -486,6 +529,8 @@ public class ClientProvider extends ContentProvider {
                 return ClientEntry.CONTENT_LIST_TYPE;
             case CLIENT_ID:
                 return ClientEntry.CONTENT_ITEM_TYPE;
+            case SEARCH:
+                return null;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }

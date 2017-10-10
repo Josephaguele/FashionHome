@@ -25,10 +25,8 @@
     <string name="hint_style">Cloth Style</string>
 
     <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_length">Length</string>
 
     <!-- Units for length of the customer (inches) [CHAR LIMIT=5] -->
-    <string name="unit_length">inches</string>
 
     <!-- Label for dropdown menu option if the pet's gender is unknown [CHAR LIMIT=20] -->
     <string name="gender_unknown">Unknown</string>
@@ -41,7 +39,7 @@
     <string name="your_cloth">"YOUR CLOTH: "</string>
     <string name="share_client_details">Share client details</string>
     <string name="insert_dummy_client_data">Insert dummy client data</string>
-    <string name="search_client">Search client</string>
+    <string name="menu_search">Search </string>
     <string name="about">About</string>
     <string name="delete_all">Delete all</string>
     <string name="client_name">"Client Name: "</string>
@@ -57,8 +55,9 @@
     <string name="measurement">Measurement details are:\n</string>
     <string name="ajoke_ade_couture">AJOKE ADE COUTURE\n</string>
     <string name="balance_payment">balance</string>
-    <string name="amount">Amount</string>
     <string name="send_sms">SMS 1</string>
+    <string name="client">Clients database</string>
+    <string name="search_client">Search client database</string>
 
 
 </resources>

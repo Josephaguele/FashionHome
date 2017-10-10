@@ -14,10 +14,10 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="2dp"
-        android:divider="@color/editorColorPrimary"
+        android:divider="#c8c8c9"
+        android:dividerHeight="0.1dp"
         android:padding="8dp"/>
-
+   <!-- android:dividerHeight="0.1dp"-->
     <!--Empty view for the list -->
     <RelativeLayout
         android:id="@+id/empty_view"

@@ -339,7 +339,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         mBlouseLength = (EditText) findViewById(R.id.edit_blouselength);
 
-        mKaftanLength = (EditText) findViewById(R.id.edit_kaftanlength); // Men measurement begins here
+        mKaftanLength = (EditText) findViewById(R.id.edit_kaftanlength);
+        // Men measurement begins here
 
         mMaleTop = (EditText) findViewById(R.id.edit_maleTop);
 
@@ -1001,18 +1002,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mMaleLongSleeve.setText(maleLongSleeveLenght);
             mChest.setText(chest);
             mBelly.setText(belly);
-            mDate.setText(date);
             mAnkle.setText(ankle);
             mCalf.setText(calf);
             mWaist.setText(maleWaist);
             mThigh.setText(thigh);
             mTrouserLength.setText(trouserLength);
+
             mNameEditText.setText(name);
             mAddressEditText.setText(address);
             mStyleEditText.setText(style);
             mNumberEditText.setText(number);
             mNumber2EditText.setText(number2);
             mEmailAddress.setText(emailAddress);
+            mDate.setText(date);
+
             mboss.setText(boss);
             mFemaleWaist.setText(femaleWaist);
             mHip.setText(hip);
@@ -1022,7 +1025,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mfemaleTop.setText(femaleTop);
             mSkirtLength.setText(skirtLength);
             mBlouseLength.setText(blouseLength);
-            mDate.setText(date);
+
+
             mAmount.setText(amount);
             mAdvance.setText(advance);
 

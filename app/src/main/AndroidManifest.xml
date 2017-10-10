@@ -10,6 +10,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupOnly="true"
         android:icon="@drawable/pics"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -45,9 +46,40 @@
         </activity>
 
 
+        <activity
+            android:name=".ClientDetails"
+            android:label="Client Details"
+            android:parentActivityName=".CatalogActivity"
+            android:theme="@style/EditorThemex">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CatalogActivity" />
+        </activity>
 
 
+        <!--Searchable-->
+        <activity
+            android:name=".SearchableActivity"
+            android:label="@string/menu_search"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
 
+            <!--FOr backward compatibility of android-->
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
+
+        <!--Points to searchable activity so the whole app can invoke search. -->
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".SearchableActivity"/>
 
         <provider
             android:name=".data.ClientProvider"

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/client"
+    android:hint="@string/search_client"
+    android:searchSuggestAuthority="com.example.android.fashionhome"
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestSelection="client_name LIKE ?"
+    android:searchSuggestThreshold="3"
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
+    android:searchSuggestIntentData="content://com.example.android.fashionhome.data.ClientContract">
+</searchable>

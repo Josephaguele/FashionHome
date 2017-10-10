@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.android.fashionhome.data.ClientContract.ClientEntry;
 import com.example.android.fashionhome.data.ClientCursorAdapter;
 import com.example.android.fashionhome.data.ClientDbHelper;
+import com.example.android.fashionhome.data.DbExportImport;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +34,7 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
 import static android.R.attr.data;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.os.Environment.getExternalStorageDirectory;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.ADVANCE;
@@ -70,6 +72,7 @@ import static com.example.android.fashionhome.data.ClientContract.ClientEntry.CO
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.GENDER_FEMALE;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry._ID;
 import static com.example.android.fashionhome.data.ClientContract.ClientEntry.CONTENT_URI;
+import static com.example.android.fashionhome.data.ClientContract.PATH_CLIENTS;
 import static com.example.android.fashionhome.data.ClientDbHelper.DATABASE_NAME;
 
 /**
@@ -128,12 +131,15 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         clientListView.setAdapter(mCursorAdapter);
 
+
+
+
         // Setup the item click listener
         clientListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id){
                 // Create new intent to go to {@link EditorActivity}
-                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                Intent intent = new Intent(CatalogActivity.this, ClientDetails.class);
 
                 // Form the content URI that represents the specific pet that was clicked on,
                 // by appending the "id" ( passed as input to this method) onto the
@@ -147,6 +153,32 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
                 //Launch the {@link EditorActivity} to display the data for the current pet.
                 startActivity(intent);
+            }
+        });
+
+
+
+        //set up the item long click listener to listen open the editor activity
+        clientListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // Create new intent to go to {@link EditorActivity}
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+
+                // Form the content URI that represents the specific pet that was clicked on,
+                // by appending the "id" ( passed as input to this method) onto the
+                // {@link PetEntry#CONTENT_URI}
+                // For example, the URI would be "content://com.example.android.pets/pets/2"
+                // if the pet with ID 2 was clicked on.
+                Uri currentClientUri = ContentUris.withAppendedId(ClientEntry.CONTENT_URI, id);
+
+                //Set the URI on the data field of the intent
+                intent.setData(currentClientUri);
+
+                //Launch the {@link EditorActivity} to display the data for the current pet.
+                startActivity(intent);
+
+                return true;
             }
         });
 
@@ -190,27 +222,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         int rowsDeleted = getContentResolver().delete(ClientEntry.CONTENT_URI, null, null);
         Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
     }
- /*   // retrieve data and filter
-    public Cursor retrieve (String searchTerm){
-
-        ClientDbHelper mDbHelper = null;
-        SQLiteDatabase database = mDbHelper.getReadableDatabase();
-        String[] columns = {ClientEntry._ID, ClientEntry.COLUMN_CLIENT_NAME};
-        Cursor c = null;
-
-        if( searchTerm != null && searchTerm.length()>0){
-            String sql = "SELECT * FROM "+ ClientEntry.TABLE_NAME+
-                    " WHERE "+ClientEntry.COLUMN_CLIENT_NAME+
-                    " LIKE '%"+searchTerm+"%'";
-            c= database.rawQuery(sql,null);
-            return c;
-        }
-
-        c = database.query(ClientEntry.TABLE_NAME, columns, null, null, null, null, null);
-        return c;
-    }
-*/
-
 
 
     @Override
@@ -223,50 +234,27 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
+                deleteAllPets();
+                return true;
 
+            case R.id.menu_search:
+                onSearchRequested();
                 return true;
 
             case R.id.action_export:
-                exportDB();
-
+                //exportDB();
+                DbExportImport.exportDb();
+                Toast.makeText(getApplicationContext(),"stored in Fashion Home Folder\n" +
+                        "Please do not delete data",Toast.LENGTH_LONG).show();
                 return true;
 
             case R.id.action_import:
-
+                DbExportImport.importIntoDb(getApplicationContext());
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-
- /*   private void backUpDatabase(){
-        //Open your local db as the input stream
-
-        //Context context ;
-        String inFileName = getFilesDir().getPath()+DATABASE_NAME;
-
-        File dbFile = new File(inFileName);
-        try{
-            FileInputStream fis = new FileInputStream(dbFile);
-            String outFileName = Environment.getExternalStorageDirectory()+"/"+ ClientDbHelper.DATABASE_NAME;
-            //Open the empty db as the output stream
-            OutputStream output = new FileOutputStream(outFileName);
-            //transfer bytes from teh input file to the output file
-            byte[] buffer = new byte[1024];
-            int length;
-            while((length = fis.read(buffer))>0){
-                output.write(buffer, 0, length);
-            }
-            //Close the streams
-            output.flush();
-            output.close();
-            fis.close();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-
-
-    }*/
 
 
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle){
@@ -340,43 +328,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
 
 
-
-   private void exportDB(){
-
-
-            File sd = getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
-            FileChannel source = null;
-            FileChannel destination = null;
-
-                String currentDBPath = getFilesDir().getPath()+DATABASE_NAME;
-                String backupDBPath = DATABASE_NAME;
-                File currentDB = new File(data, currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
-
-                /*if(currentDB.exists()){
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileInputStream(backupDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                    Toast.makeText(getBaseContext(), "DB Exported!", Toast.LENGTH_LONG).show();
-            }*/
-
-       try{
-           source = new FileInputStream(currentDB).getChannel();
-           destination = new FileOutputStream(backupDB).getChannel();
-           destination.transferFrom(source, 0, source.size());
-           source.close();
-           destination.close();
-           Toast.makeText(this, "DB Exported", Toast.LENGTH_LONG).show();
-       } catch (IOException e){
-           e.printStackTrace();
-       }
-
-
-
-    }
 
 
 }
